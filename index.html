@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Secure Writing Exam | Compare-Contrast Essay</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f0e17;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', sans-serif;
+            color: #e5e9f0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .page-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #1a1b2f;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
+            padding: 28px 32px;
+            border: 1px solid #2e2f44;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 2px solid #ffb86b;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        h1 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            background: linear-gradient(135deg, #ffb86b, #ff79c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .timer-box {
+            background: #282a45;
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-family: monospace;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f1fa8c;
+            border: 1px solid #ffb86b;
+        }
+        .card {
+            background: #0f0e1a;
+            border-left: 8px solid #ffb86b;
+            padding: 20px 26px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+        }
+        .card h3 {
+            color: #ffb86b;
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+        }
+        .full-instruction {
+            background: #1e1f33;
+            padding: 20px;
+            border-radius: 20px;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #0c0d1c;
+            margin-top: 15px;
+            font-size: 0.75rem;
+        }
+        .rubric-table th, .rubric-table td {
+            border: 1px solid #3b3d5e;
+            padding: 8px 6px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .rubric-table th {
+            background: #2a2c47;
+            color: #ffb86b;
+        }
+        .section {
+            background: #23253b;
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-left: 5px solid #ff79c6;
+            padding-left: 18px;
+            margin-bottom: 20px;
+        }
+        .question-group {
+            margin-bottom: 22px;
+        }
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: #d6deeb;
+        }
+        input, textarea, select {
+            width: 100%;
+            background: #0c0d1c;
+            border: 1px solid #3b3d5e;
+            border-radius: 18px;
+            padding: 12px 18px;
+            color: #f8f8f2;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        .essay-textarea, .review-text {
+            min-height: 380px;
+            font-family: 'Courier New', monospace;
+            background: #0c0d1c;
+            padding: 16px;
+            border-radius: 18px;
+            white-space: pre-wrap;
+        }
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            background: #ffb86b;
+            border: none;
+            padding: 12px 28px;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #1a1b2f;
+            transition: 0.2s;
+        }
+        button:hover { background: #ff9e3d; transform: scale(0.98);}
+        .btn-secondary { background: #3b3d5e; color: #f1f1f1; }
+        .warning-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff5555dd;
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            z-index: 3000;
+            color: white;
+        }
+        .hidden { display: none; }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .review-box {
+            background: #23253b;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        @media print {
+            body { background: white; margin: 0; padding: 0; }
+            .no-print { display: none !important; }
+            .page-container { box-shadow: none; padding: 15px; background: white; color: black; }
+            .review-box { background: #f5f5f5; border: 1px solid #ccc; }
+            .rubric-table td, .rubric-table th { border-color: #999; }
+        }
+    </style>
+</head>
+<body>
+<div id="warningToast" class="warning-toast hidden"></div>
+
+<!-- PAGE 1: LOGIN -->
+<div id="loginPage" class="page-container">
+    <div class="header-bar"><h1>🔐 EXAM LOGIN</h1></div>
+    <div style="text-align:center; background:#23253b; border-radius:40px; padding:40px; max-width:500px; margin:0 auto;">
+        <h2 style="color:#ffb86b;">Writing Assignment Portal</h2>
+        <p style="margin:15px 0;">Enter credentials to begin</p>
+        <input type="text" id="studentName" placeholder="Full Name" style="margin-bottom:15px;">
+        <input type="text" id="studentID" placeholder="Student ID" style="margin-bottom:15px;">
+        <input type="text" id="studyProgram" placeholder="Study Program" style="margin-bottom:25px;">
+        <button id="proceedToInstructionsBtn">📖 Proceed to Instructions</button>
+    </div>
+    <footer>Secure Environment | Anti-Cheat Active</footer>
+</div>
+
+<!-- PAGE 2: INSTRUCTION PAGE -->
+<div id="instructionPage" class="page-container hidden">
+    <div class="header-bar"><h1>📋 EXAM INSTRUCTIONS</h1><div class="timer-box">--:--</div></div>
+    <div class="card">
+        <h3>📌 Assignment Brief (Official)</h3>
+        <div class="full-instruction" id="fullInstructionText"></div>
+    </div>
+    <div class="btn-group"><button id="gotoOutlineBtn">➡️ Go to Section A (Outlining)</button></div>
+    <footer>Read carefully. Timer starts after you leave this page.</footer>
+</div>
+
+<!-- PAGE 3: SECTION A - OUTLINING -->
+<div id="outliningPage" class="page-container hidden">
+    <div class="header-bar"><h1>📌 Section A: Outlining</h1><div class="timer-box" id="timerDisplay">60:00</div></div>
+    <div class="card"><h3>📖 Reference: Instructions & Rubric</h3><div class="full-instruction" id="outlineInstructionRef"></div></div>
+    <div class="section">
+        <div class="section-title">✏️ Pre-Writing Outline</div>
+        <div class="question-group"><label>a. Chosen topic:</label><select id="chosenTopic"><option value="">-- Select topic --</option><option>Human vs. AI Morality: how AI and humans react to complex morality concepts/issues</option><option>Human vs. AI Creativity: how AI and humans generate ideas using authentic styles</option><option>Resilience vs. Intelligence: which plays a bigger role in achieving long-term success</option><option>Risk-Taking vs Playing Safe: how risk-taking and playing safe mindsets result in different personalities</option><option>Discovery vs Routine Learning: how discovery learning and structured repetition shape understanding</option></select></div>
+        <div class="question-group"><label>b. Introduction (main idea, thesis statement):</label><textarea id="introOutline" placeholder="State background, things you compare, and thesis (3 aspects) ..."></textarea></div>
+        <div class="question-group"><label>c. Body 1 (main idea, supporting details):</label><textarea id="body1Outline" placeholder="Aspect 1: main idea + compare/contrast Item A & B"></textarea></div>
+        <div class="question-group"><label>d. Body 2 (main idea, supporting details):</label><textarea id="body2Outline" placeholder="Aspect 2: main idea + compare/contrast"></textarea></div>
+        <div class="question-group"><label>e. Body 3 (main idea, supporting details):</label><textarea id="body3Outline" placeholder="Aspect 3: main idea + supporting details"></textarea></div>
+        <div class="question-group"><label>f. Conclusion (thesis restatement, personal take/recommendation):</label><textarea id="conclusionOutline" placeholder="Summarize points, restate thesis, final remarks"></textarea></div>
+    </div>
+    <div class="nav-buttons"><button id="backToInstructionsOutline" class="btn-secondary">← Back to Instructions</button><button id="gotoWritingBtn">Next: Section B (Writing) →</button></div>
+</div>
+
+<!-- PAGE 4: SECTION B - WRITING -->
+<div id="writingPage" class="page-container hidden">
+    <div class="header-bar"><h1>✍️ Section B: Full Essay</h1><div class="timer-box" id="writingTimerDisplay">60:00</div></div>
+    <div class="card"><h3>📖 Instruction Reminder</h3><div class="full-instruction" id="writingInstructionRef"></div></div>
+    <div class="section">
+        <div class="section-title">📝 Write your Compare-Contrast Essay (5 paragraphs, >=5 sentences each)</div>
+        <div class="question-group"><label>Your Essay:</label><textarea id="essayContent" class="essay-textarea" placeholder="Introduction | Body 1 (Aspect 1) | Body 2 (Aspect 2) | Body 3 (Aspect 3) | Conclusion ..."></textarea></div>
+    </div>
+    <div class="nav-buttons"><button id="backToOutlineWriting" class="btn-secondary">← Back to Outlining</button><button id="submitEssayBtn">📎 Submit Assignment</button></div>
+    <footer>Submission finalizes exam. You will then review and save as PDF.</footer>
+</div>
+
+<!-- PAGE 5: REVIEW & PDF PAGE (after submission) -->
+<div id="reviewPage" class="page-container hidden">
+    <div class="header-bar"><h1>📄 Review Your Submission</h1><div class="timer-box">✅ Submitted</div></div>
+    <div class="card">
+        <h3>📋 Student Information & Submission Summary</h3>
+        <div id="reviewSummary" style="background:#1e1f33; padding:15px; border-radius:20px;"></div>
+    </div>
+    <div class="review-box">
+        <h3 style="color:#ffb86b; margin-bottom:15px;">✏️ Pre-Writing Outline</h3>
+        <div id="reviewOutline"></div>
+    </div>
+    <div class="review-box">
+        <h3 style="color:#ffb86b; margin-bottom:15px;">📖 Final Essay</h3>
+        <div id="reviewEssay" class="review-text"></div>
+    </div>
+    <div class="btn-group no-print">
+        <button id="printSaveBtn" style="background:#2e7d64;">🖨️ Save as PDF (Print)</button>
+        <button id="backToLoginBtn" class="btn-secondary">🔚 Exit to Login</button>
+    </div>
+    <footer>Use "Save as PDF" to download your submission with official pattern. Print dialog → Save as PDF.</footer>
+</div>
+
+<script>
+    // ---------- Data ----------
+    let studentData = { name: "", id: "", program: "" };
+    let examActive = false;
+    let timeSeconds = 3600;
+    let timerInterval = null;
+    let isSubmitted = false;
+    let warnCount = 0;
+    const MAX_WARN = 3;
+    let violationTimerActive = false;
+    
+    // DOM Pages
+    const loginPage = document.getElementById('loginPage');
+    const instructionPage = document.getElementById('instructionPage');
+    const outliningPage = document.getElementById('outliningPage');
+    const writingPage = document.getElementById('writingPage');
+    const reviewPage = document.getElementById('reviewPage');
+    
+    // Buttons
+    const proceedBtn = document.getElementById('proceedToInstructionsBtn');
+    const gotoOutlineBtn = document.getElementById('gotoOutlineBtn');
+    const gotoWritingBtn = document.getElementById('gotoWritingBtn');
+    const backToInstructionsOutline = document.getElementById('backToInstructionsOutline');
+    const backToOutlineWriting = document.getElementById('backToOutlineWriting');
+    const submitBtn = document.getElementById('submitEssayBtn');
+    const printSaveBtn = document.getElementById('printSaveBtn');
+    const backToLoginBtn = document.getElementById('backToLoginBtn');
+    
+    // Timer displays
+    const timerDisplayOutline = document.getElementById('timerDisplay');
+    const writingTimerDisplay = document.getElementById('writingTimerDisplay');
+    
+    // ========== RUBRIC TABLE HTML ==========
+    const rubricTableHTML = `
+    <table class="rubric-table">
+        <thead><tr><th>Indicator</th><th>4 (Excellent)</th><th>3 (Good)</th><th>2 (Fair)</th><th>1 (Very Low)</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Content & Ideas</strong></td><td>Clear, insightful, well-developed</td><td>Relevant and clear with minor gaps</td><td>Basic ideas, lacks clarity/depth</td><td>Unclear or irrelevant</td></tr>
+            <tr><td><strong>Organization & Coherence</strong></td><td>Logical flow, smooth transitions</td><td>Mostly clear with minor issues</td><td>Some organization, flow unclear</td><td>Disorganized, confusing</td></tr>
+            <tr><td><strong>Language Use & Grammar</strong></td><td>Varied structures, <7 errors</td><td>Mostly correct (8-15 errors)</td><td>Frequent errors (40-50%)</td><td>Numerous errors (>50%)</td></tr>
+            <tr><td><strong>Vocabulary</strong></td><td>Rich and precise</td><td>Appropriate, few misuses</td><td>Limited or repetitive</td><td>Inappropriate/very limited</td></tr>
+            <tr><td><strong>Capitalization & punctuation</strong></td><td>Consistent (<3 mistakes)</td><td>Mostly correct (4-8 errors)</td><td>Several errors, interfere</td><td>Lots of errors, difficult to read</td></tr>
+        </tbody>
+    </table>`;
+    
+    const fullInstructionHTML = `
+    <div><strong>Topic options:</strong></div>
+    <ul style="margin:10px 0 20px 25px;">
+        <li>Human vs. AI Morality: how AI and humans react to complex morality concepts/issues</li>
+        <li>Human vs. AI Creativity: how AI and humans generate ideas using authentic styles</li>
+        <li>Resilience vs. Intelligence: which plays a bigger role in achieving long-term success</li>
+        <li>Risk-Taking vs Playing Safe: how risk-taking and playing safe mindsets result in different personalities</li>
+        <li>Discovery vs Routine Learning: how discovery learning and structured repetition shape understanding</li>
+    </ul>
+    <div><strong>Essay Outline & Requirements:</strong></div>
+    <ul style="margin:10px 0 20px 25px;">
+        <li>Paragraph 1: Introduction & Thesis > state background, things you compare, and thesis (3 aspects you want to compare & contrast)</li>
+        <li>Paragraph 2: Aspect 1 > state the main idea and compare & contrast Item A & Item B</li>
+        <li>Paragraph 3: Aspect 2 > state the main idea and compare & contrast Item A & Item B</li>
+        <li>Paragraph 4: Aspect 3 > state the main idea and compare & contrast Item A & Item B</li>
+        <li>Paragraph 5: Conclusion > summarize points, restate thesis, and give final remarks</li>
+    </ul>
+    <div><strong>Writing rubric:</strong></div>
+    ${rubricTableHTML}
+    <div style="margin-top:15px;"><em>Each paragraph must contain at least five sentences. Use the five-paragraph structure.</em></div>`;
+    
+    function showWarning(msg) {
+        const toast = document.getElementById('warningToast');
+        toast.innerText = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+    
+    // ========== STRONG ANTI-CHEAT ==========
+    let antiCheatActive = false;
+    function startAntiCheat() {
+        if(antiCheatActive) return;
+        antiCheatActive = true;
+        
+        const handleVisibilityChange = () => {
+            if (!examActive || isSubmitted) return;
+            if (document.hidden) {
+                warnCount++;
+                showWarning(`⚠️ TAB SWITCH DETECTED! Warning ${warnCount}/${MAX_WARN}`);
+                if (warnCount >= MAX_WARN) forceSubmission();
+            }
+        };
+        
+        const handleWindowBlur = () => {
+            if (!examActive || isSubmitted) return;
+            warnCount++;
+            showWarning(`⚠️ Lost focus (new tab/window) Warning ${warnCount}/${MAX_WARN}`);
+            if (warnCount >= MAX_WARN) forceSubmission();
+        };
+        
+        const blockDevTools = (e) => {
+            if (!examActive || isSubmitted) return;
+            // F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+U, PrintScreen
+            if (e.key === 'F12' || e.key === 'PrintScreen' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                showWarning("🛡️ Developer tools blocked for exam integrity.");
+                warnCount++;
+                if (warnCount >= MAX_WARN) forceSubmission();
+                return false;
+            }
+            // Block Ctrl+P for print (but we allow print only after submission)
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                showWarning("Printing is disabled during exam. Available after submission.");
+                return false;
+            }
+        };
+        
+        const blockRightClick = (e) => {
+            if (!examActive || isSubmitted) return;
+            e.preventDefault();
+            showWarning("Right-click disabled during exam.");
+            warnCount++;
+            if (warnCount >= MAX_WARN) forceSubmission();
+        };
+        
+        // Also detect resize that might indicate split screen
+        let originalWidth = window.innerWidth;
+        const detectSplit = () => {
+            if (!examActive || isSubmitted) return;
+            if (Math.abs(window.innerWidth - originalWidth) > 200) {
+                warnCount++;
+                showWarning(`⚠️ Window resize/split attempt! Warning ${warnCount}/${MAX_WARN}`);
+                if (warnCount >= MAX_WARN) forceSubmission();
+                originalWidth = window.innerWidth;
+            }
+        };
+        
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('blur', handleWindowBlur);
+        window.addEventListener('keydown', blockDevTools);
+        document.addEventListener('contextmenu', blockRightClick);
+        window.addEventListener('resize', detectSplit);
+        
+        window._antiCheatCleanup = () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleWindowBlur);
+            window.removeEventListener('keydown', blockDevTools);
+            document.removeEventListener('contextmenu', blockRightClick);
+            window.removeEventListener('resize', detectSplit);
+            antiCheatActive = false;
+        };
+    }
+    
+    function stopAntiCheat() {
+        if(window._antiCheatCleanup) window._antiCheatCleanup();
+    }
+    
+    function forceSubmission() {
+        if(isSubmitted) return;
+        isSubmitted = true;
+        examActive = false;
+        if(timerInterval) clearInterval(timerInterval);
+        showWarning("🚨 Force submission due to violations.");
+        // Save current data and go to review
+        goToReviewPage();
+    }
+    
+    function startTimer() {
+        if(timerInterval) clearInterval(timerInterval);
+        timeSeconds = 3600;
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            if(!examActive) return;
+            if(timeSeconds <= 0){
+                clearInterval(timerInterval);
+                examActive = false;
+                alert("TIME'S UP! Auto-submitting.");
+                goToReviewPage();
+            } else {
+                timeSeconds--;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+    
+    function updateTimerDisplay() {
+        let mins = Math.floor(timeSeconds/60);
+        let secs = timeSeconds%60;
+        let str = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        if(timerDisplayOutline) timerDisplayOutline.innerText = str;
+        if(writingTimerDisplay) writingTimerDisplay.innerText = str;
+    }
+    
+    function goToPage(pageId) {
+        loginPage.classList.add('hidden');
+        instructionPage.classList.add('hidden');
+        outliningPage.classList.add('hidden');
+        writingPage.classList.add('hidden');
+        reviewPage.classList.add('hidden');
+        document.getElementById(pageId).classList.remove('hidden');
+    }
+    
+    function populateInstructions() {
+        document.getElementById('fullInstructionText').innerHTML = fullInstructionHTML;
+        document.getElementById('outlineInstructionRef').innerHTML = fullInstructionHTML;
+        document.getElementById('writingInstructionRef').innerHTML = fullInstructionHTML;
+    }
+    
+    // After submission: collect all data and display on review page
+    function goToReviewPage() {
+        if(!isSubmitted) {
+            // perform submission logic
+            let essay = document.getElementById('essayContent')?.value.trim() || "";
+            if(essay.length < 50 && !forceSubmission) {
+                alert("Please write a substantial essay before submitting (at least 50 characters).");
+                return;
+            }
+            isSubmitted = true;
+            examActive = false;
+            if(timerInterval) clearInterval(timerInterval);
+            stopAntiCheat();
+        }
+        
+        // Collect all form data
+        const chosenTopic = document.getElementById('chosenTopic')?.value || "Not selected";
+        const introVal = document.getElementById('introOutline')?.value || "";
+        const body1Val = document.getElementById('body1Outline')?.value || "";
+        const body2Val = document.getElementById('body2Outline')?.value || "";
+        const body3Val = document.getElementById('body3Outline')?.value || "";
+        const conclusionVal = document.getElementById('conclusionOutline')?.value || "";
+        const essayFull = document.getElementById('essayContent')?.value || "";
+        
+        // Display summary
+        const summaryDiv = document.getElementById('reviewSummary');
+        summaryDiv.innerHTML = `
+            <p><strong>Name:</strong> ${escapeHtml(studentData.name)}</p>
+            <p><strong>Student ID:</strong> ${escapeHtml(studentData.id)}</p>
+            <p><strong>Study Program:</strong> ${escapeHtml(studentData.program)}</p>
+            <p><strong>Submission Time:</strong> ${new Date().toLocaleString()}</p>
+            <p><strong>Chosen Topic:</strong> ${escapeHtml(chosenTopic)}</p>
+            <hr style="border-color:#3b3d5e; margin:10px 0;">
+            <p><strong>Status:</strong> ✅ Submitted successfully</p>
+        `;
+        
+        const outlineDiv = document.getElementById('reviewOutline');
+        outlineDiv.innerHTML = `
+            <p><strong>b. Introduction:</strong><br><span style="white-space:pre-wrap;">${escapeHtml(introVal) || "—"}</span></p>
+            <p><strong>c. Body 1:</strong><br><span style="white-space:pre-wrap;">${escapeHtml(body1Val) || "—"}</span></p>
+            <p><strong>d. Body 2:</strong><br><span style="white-space:pre-wrap;">${escapeHtml(body2Val) || "—"}</span></p>
+            <p><strong>e. Body 3:</strong><br><span style="white-space:pre-wrap;">${escapeHtml(body3Val) || "—"}</span></p>
+            <p><strong>f. Conclusion:</strong><br><span style="white-space:pre-wrap;">${escapeHtml(conclusionVal) || "—"}</span></p>
+        `;
+        
+        document.getElementById('reviewEssay').innerHTML = `<div style="white-space:pre-wrap;">${escapeHtml(essayFull) || "No essay content."}</div>`;
+        
+        goToPage('reviewPage');
+    }
+    
+    function escapeHtml(str) {
+        if(!str) return "";
+        return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]));
+    }
+    
+    // PDF via print with custom styling (distinct pattern)
+    function printAsPDF() {
+        // Add temporary print styles with distinct background pattern
+        const style = document.createElement('style');
+        style.id = 'print-pattern-style';
+        style.textContent = `
+            @media print {
+                body {
+                    background: white !important;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+                .page-container {
+                    background: #fef8e7 !important;
+                    border: 4px double #b8860b !important;
+                    box-shadow: none !important;
+                    padding: 25px !important;
+                    position: relative;
+                }
+                .page-container::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    pointer-events: none;
+                    background-image: repeating-linear-gradient(45deg, rgba(200,160,100,0.1) 0px, rgba(200,160,100,0.1) 2px, transparent 2px, transparent 12px), repeating-linear-gradient(135deg, rgba(150,110,60,0.08) 0px, rgba(150,110,60,0.08) 1px, transparent 1px, transparent 16px);
+                    z-index: -1;
+                }
+                .review-box, .card {
+                    break-inside: avoid;
+                    background: #fff5e6 !important;
+                    border: 1px solid #d4af37 !important;
+                }
+                .no-print { display: none !important; }
+                .rubric-table td, .rubric-table th { border-color: #8b5a2b !important; }
+                footer { display: none !important; }
+                .header-bar { border-bottom-color: #b8860b !important; }
+            }
+        `;
+        document.head.appendChild(style);
+        window.print();
+        setTimeout(() => { if(document.getElementById('print-pattern-style')) document.getElementById('print-pattern-style').remove(); }, 500);
+    }
+    
+    // Event Listeners
+    proceedBtn.addEventListener('click', () => {
+        let name = document.getElementById('studentName').value.trim();
+        let id = document.getElementById('studentID').value.trim();
+        let prog = document.getElementById('studyProgram').value.trim();
+        if(!name || !id || !prog) { alert("Please fill all fields."); return; }
+        studentData = { name, id, program: prog };
+        populateInstructions();
+        goToPage('instructionPage');
+    });
+    
+    gotoOutlineBtn.addEventListener('click', () => {
+        if(!examActive){
+            examActive = true;
+            startTimer();
+            startAntiCheat();
+        }
+        goToPage('outliningPage');
+    });
+    
+    gotoWritingBtn.addEventListener('click', () => {
+        if(!document.getElementById('chosenTopic').value){
+            alert("Please select a topic before proceeding.");
+            return;
+        }
+        goToPage('writingPage');
+    });
+    
+    backToInstructionsOutline.addEventListener('click', () => { goToPage('instructionPage'); });
+    backToOutlineWriting.addEventListener('click', () => { goToPage('outliningPage'); });
+    
+    submitBtn.addEventListener('click', () => {
+        if(isSubmitted) return;
+        goToReviewPage();
+    });
+    
+    printSaveBtn.addEventListener('click', printAsPDF);
+    
+    backToLoginBtn.addEventListener('click', () => {
+        // reset everything
+        location.reload();
+    });
+    
+    // Prevent leaving before submission warning
+    window.addEventListener('beforeunload', (e) => {
+        if(examActive && !isSubmitted){
+            e.preventDefault();
+            e.returnValue = "Exam in progress! If you leave, violations will be recorded.";
+        }
+    });
+    
+    populateInstructions();
+</script>
+</body>
+</html>
